@@ -44,7 +44,7 @@ X = data.drop(columns = ['Loan_Status']).values
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=221, shuffle=True)
 y_train = np.array(y_train).astype('int')
 y_test = np.array(y_test).astype('int')
-models = [SVM(), kNN(n_neighbors=4, weights="distance")]
+models = [SVM(kernel='sigmoid'), kNN(n_neighbors=5, weights="distance")]
 for model in models:
     model.fit(np.array(X_train), y_train)
     y_pred = model.predict(X_test)
@@ -54,12 +54,15 @@ scaler = StandardScaler()
 scaler.fit(X_train)
 X_train = scaler.transform(X_train)
 X_test = scaler.transform(X_test)
-models = [SVM(), kNN(n_neighbors=4, weights="distance")]
+models = [SVM(), kNN()]
 for model in models:
     model.fit(np.array(X_train), y_train)
     y_pred = model.predict(X_test)
     print(confusion_matrix(y_test, y_pred))
 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=221, shuffle=True)
+y_train = np.array(y_train).astype('int')
+y_test = np.array(y_test).astype('int')
 scaler = MinMaxScaler()
 scaler.fit(X_train)
 X_train = scaler.transform(X_train)
@@ -70,6 +73,9 @@ for model in models:
     y_pred = model.predict(X_test)
     print(confusion_matrix(y_test, y_pred))
     
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=221, shuffle=True)
+y_train = np.array(y_train).astype('int')
+y_test = np.array(y_test).astype('int')
 scaler = RobustScaler()
 scaler.fit(X_train)
 X_train = scaler.transform(X_train)
