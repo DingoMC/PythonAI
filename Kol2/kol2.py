@@ -55,8 +55,8 @@ y = vals[:,-1]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 scaler = StandardScaler()
 X_train = scaler.fit_transform(X_train)
-y_train = np.array(y_train).astype('int')
-y_test = np.array(y_test).astype('int')
+y_train = np.array(y_train).astype('float')
+y_test = np.array(y_test).astype('float')
 X_paced=PCA(2).fit_transform(X_train)
 females = y_train == 1
 fig,ax=plt.subplots(1,1)
