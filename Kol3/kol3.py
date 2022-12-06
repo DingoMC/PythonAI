@@ -18,7 +18,7 @@ learning_rate = 0.0001
 kernel_size = (3, 3)
 pooling_size = (2, 2)
 conv_rule = 'same'
-act_func = 'softmax'
+act_func = 'relu'
 for i in range (0, 2):
     model.add(Conv2D(input_shape = X_train.shape[1:],
         filters=filter_cnt,
@@ -27,8 +27,8 @@ for i in range (0, 2):
 for i in range (0, 2):
     model.add(MaxPooling2D(pooling_size))
 model.add(Flatten())    # Warstwa spłaszczająca
-for i in range (0, 2):
-    model.add(Dense(class_count, activation=act_func))
+model.add(Dense(class_count, activation=act_func))
+model.add(Dense(class_count, activation='softmax'))
 model.compile(optimizer=Adam(learning_rate),
     loss='SparseCategoricalCrossentropy',       # Funkcja - róznica blędu między wartością przewidzianą a rzeczywistą
     metrics='accuracy')
@@ -38,7 +38,7 @@ history = model.fit(
     y = y_train,
     epochs = class_count,
     validation_data=(X_test, y_test),
-    verbose = 1)
+    verbose = 1).history
 model.predict(X_test)
 floss_train = history['loss']
 floss_test = history['val_loss']
