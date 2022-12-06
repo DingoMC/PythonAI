@@ -36,7 +36,7 @@ model.summary()
 history = model.fit(
     x = X_train,
     y = y_train,
-    epochs = class_count,
+    epochs = 5,
     validation_data=(X_test, y_test),
     verbose = 1).history
 model.predict(X_test)
