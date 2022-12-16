@@ -5,6 +5,7 @@ from keras.models import Model
 import tensorflow as tf
 import numpy as np
 import pandas as pd
+from keras.layers.merging import concatenate
 from keras.datasets import mnist
 from keras.utils.vis_utils import plot_model
 def add_inseption_module(input_tensor):
@@ -76,6 +77,39 @@ def res_net (input_tensor):
     return output_tensor
 output_tensor = input_tensor = Input(X_train.shape[1:])
 output_tensor = res_net(output_tensor)
+ANN = Model(inputs = input_tensor,
+    outputs = output_tensor)
+ANN.compile(loss = 'categorical_crossentropy',
+    metrics = 'accuracy',
+    optimizer = 'adam')
+plot_model(ANN, show_shapes=True)
+# %%
+# 8.3
+from keras.layers import Dense, Input, Reshape, BatchNormalization, Conv2D
+from keras.models import Model
+import numpy as np
+import pandas as pd
+from keras.layers.merging import concatenate
+from keras.datasets import mnist
+from keras.utils.vis_utils import plot_model
+data = mnist.load_data()
+X_train, y_train = data[0][0], data[0][1]
+X_test, y_test = data[1][0], data[1][1]
+X_train = np.expand_dims(X_train, axis = -1)
+X_test = np.expand_dims(X_test, axis = -1)
+y_train = pd.get_dummies(pd.Categorical(y_train)).values
+y_test = pd.get_dummies(pd.Categorical(y_test)).values
+class_cnt = y_train.shape[1]
+def dense_net(input_tensor):
+    skip_tensor = input_tensor
+    output_tensor = input_tensor
+    output_tensor = Conv2D(filters = 32, kernel_size=(3, 3), padding='same')(output_tensor)
+    output_tensor = BatchNormalization()(output_tensor)
+    arr = [skip_tensor, output_tensor]
+    return concatenate(arr)
+output_tensor = input_tensor = Input(X_train.shape[1:])
+output_tensor = dense_net(output_tensor)
+output_tensor = Conv2D(filters = 1, kernel_size=(1, 1), padding='same')(output_tensor)
 ANN = Model(inputs = input_tensor,
     outputs = output_tensor)
 ANN.compile(loss = 'categorical_crossentropy',
