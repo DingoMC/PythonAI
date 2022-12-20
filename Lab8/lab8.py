@@ -54,7 +54,7 @@ y_train = pd.get_dummies(pd.Categorical(y_train)).values
 y_test = pd.get_dummies(pd.Categorical(y_test)).values
 class_cnt = y_train.shape[1]
 input_shape = (28, 28)
-output_tensor = input_tensor = Input(input_shape)
+output_tensor = input_tensor = Input(input_shape = input_shape)
 output_tensor = Reshape((784,))(output_tensor)
 output_tensor = BatchNormalization()(output_tensor)
 output_tensor = add_inseption_module(output_tensor)
