@@ -94,7 +94,8 @@ autoencoder = Model(inputs = input_aec,outputs = output_aec)
 encoder = Model(inputs = input_encoder,outputs = output_encoder)
 decoder = Model(inputs = input_decoder,outputs = dec_tensor)
 autoencoder.compile(optimizer=Adam(lrng_rate),loss='binary_crossentropy', metrics = 'acc')
-autoencoder.fit(x = X_train, y = X_train,epochs = 2, batch_size = 256)
+autoencoder.fit(x = X_train, y = X_train,epochs = 5, batch_size = 256)
+#%% 9.3
 test_photos = X_test[10:20,...].copy()
 mask = np.random.randn(*test_photos.shape)
 white = mask > 1
@@ -112,5 +113,29 @@ cleaned_images = autoencoder.predict(noisy_test_photos/255)*255
 show_pictures(test_photos)
 show_pictures(noisy_test_photos)
 show_pictures(cleaned_images)
+
+#%% 9.4
+fig, ax = plt.subplots(1, 1, figsize = (20,16))
+for i in range(10):
+  c = y_train == i
+  needed_imgs = X_train[c,...]
+  preds = encoder.predict(needed_imgs)
+  ax.scatter(preds[:,0], preds[:,1])
+ax.legend(list(range(10)))
+
+# %% 9.5
+num = 15
+limit = 0.6
+step = limit * 2 / num
+fig, ax = plt.subplots(num, num, figsize = (20,16))
+X_vals = np.arange(-limit, limit, step)
+Y_vals = np.arange(-limit, limit, step)
+for i, x in enumerate(X_vals):
+  for j, y in enumerate(Y_vals):
+    test_in = np.array([[x,y]])
+    output = decoder.predict(x=test_in)
+    output = np.squeeze(output)
+    ax[-j-1,i].imshow(output, cmap = 'jet')
+    ax[-j-1,i].axis('off')
 
 # %%
